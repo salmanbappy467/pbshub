@@ -3,7 +3,7 @@ import { connectDB } from '@/lib/db';
 import { DataNote } from '@/models/DataNote';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pbshub.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pbshub.vercel.app';
 
   // Fetch dynamic slugs
   let noteEntries: any[] = [];

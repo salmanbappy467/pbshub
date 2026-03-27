@@ -37,16 +37,16 @@ export default function Navbar() {
 
     // Close menus on click outside
     const handleClickOutside = (e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-        if (!target.closest('.profile-btn')) {
-            setProfileOpen(false);
-        }
+      const target = e.target as HTMLElement;
+      if (!target.closest('.profile-btn')) {
+        setProfileOpen(false);
+      }
     };
     window.addEventListener('click', handleClickOutside);
 
     return () => {
-        window.removeEventListener('scroll', handleScroll);
-        window.removeEventListener('click', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
@@ -85,17 +85,17 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <Link href="/login" className="btn btn-login">Login</Link>
+            <Link href="https://pbsnet.pages.dev/" className="btn btn-login">Login</Link>
           )}
-          
+
           <button className="mobile-toggle" onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}>
-             <span className="dot"></span>
-             <span className="dot"></span>
-             <span className="dot"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
           </button>
         </div>
       </div>
-      
+
       {/* Mobile Sidebar */}
       <div className={`mobile-nav ${isMobileNavOpen ? 'open' : ''} glass`}>
         {user ? (

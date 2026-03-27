@@ -146,7 +146,7 @@ export default function CommentSection({
           </form>
         ) : (
           <div className="login-to-comment glass-card">
-            <p>Want to join the discussion? <a href="/login" className="login-accent">Log in</a> or <a href="/register" className="login-accent">Register</a> to post comments and like technical tips.</p>
+            <p>Want to join the discussion? <a href="https://pbsnet.pages.dev/" className="login-accent">Log in</a> or <a href="https://pbsnet.pages.dev/" className="login-accent">Register</a> to post comments and like technical tips.</p>
           </div>
         )}
       </div>
