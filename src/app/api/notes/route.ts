@@ -82,9 +82,9 @@ export async function GET(request: NextRequest) {
         .select('slug category title icon item type details likes createdBy createdAt status specifications')
         .lean();
 
-      const rangeMatches = meterNotes.filter((note) => {
+      const rangeMatches = meterNotes.filter((note: any) => {
         const specRows = note.specifications?.rows || [];
-        return specRows.some((row) => {
+        return specRows.some((row: any) => {
           if (/meter.number.range/i.test(row.name)) {
             return row.value.some((v: string) => {
               const parts = v.split(',').map((s: string) => s.trim());
