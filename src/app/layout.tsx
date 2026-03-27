@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   icons: {
     icon: 'https://i.ibb.co/C3C1Xdtn/96.png',
   },
+  verification: {
+    google: "IdAoPkn7BxrOZRM_D7yIs43U0Xam172NcFRgIrCd108",
+  },
 };
 
 export default function RootLayout({
