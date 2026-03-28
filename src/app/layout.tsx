@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import MonetagAd from "@/components/MonetagAd";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "PBS Hub | Your Central Data & Notes Repository",
@@ -41,8 +41,34 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <Script
+          id="monetag-ad-manager"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var lastLoadTime = localStorage.getItem('monetag_last_load_time');
+                  var currentTime = new Date().getTime();
+                  var COOLDOWN = 15 * 60 * 1000; // 15 Mins
+                  
+                  if (!lastLoadTime || (currentTime - parseInt(lastLoadTime, 10)) > COOLDOWN) {
+                    var s = document.createElement('script');
+                    s.src = "https://quge5.com/88/tag.min.js";
+                    s.setAttribute("data-zone", "224134");
+                    s.async = true;
+                    s.setAttribute("data-cfasync", "false");
+                    document.head.appendChild(s);
+                    localStorage.setItem('monetag_last_load_time', currentTime.toString());
+                  }
+                } catch(e) {}
+              })();
+            `
+          }}
+        />
+      </head>
       <body className="animate-fade" suppressHydrationWarning>
-        <MonetagAd zoneId="10797546" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

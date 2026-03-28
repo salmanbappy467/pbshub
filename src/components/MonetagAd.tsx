@@ -1,39 +1,33 @@
 "use client";
 
-import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-export default function MonetagAd({ zoneId = "10797546" }: { zoneId?: string }) {
-  const [shouldLoadAd, setShouldLoadAd] = useState(false);
-
+export default function MonetagAd({ zoneId = "224134" }: { zoneId?: string }) {
   useEffect(() => {
     try {
       const lastAdLoadTime = localStorage.getItem("monetag_last_load_time");
       const currentTime = new Date().getTime();
-      const ONE_HOUR = 60 * 60 * 1000; // 1 hour in milliseconds
+      
+      // ৫ মিনিটের ক্যাপ (টেস্টিংয়ের জন্য)। আপনার প্রয়োজন অনুযায়ী 1000 * 60 * 60 (১ ঘণ্টা) করে দিতে পারবেন।
+      const COOLDOWN = 5 * 60 * 1000; 
 
-      // If ad was never loaded or 1 hour has passed
-      if (!lastAdLoadTime || currentTime - parseInt(lastAdLoadTime, 10) > ONE_HOUR) {
-        setShouldLoadAd(true);
+      if (!lastAdLoadTime || currentTime - parseInt(lastAdLoadTime, 10) > COOLDOWN) {
+        
+        // ডাইনামিকালি স্ক্রিপ্ট অ্যাড করা হচ্ছে, যা Next.js-এর অপটিমাইজেশনকে বাইপাস করে সরাসরি কাজ করবে
+        const script = document.createElement("script");
+        script.src = "https://quge5.com/88/tag.min.js";
+        script.setAttribute("data-zone", zoneId);
+        script.async = true;
+        script.setAttribute("data-cfasync", "false");
+        document.body.appendChild(script);
+
+        // স্টোরেজে টাইম সেভ হচ্ছে
         localStorage.setItem("monetag_last_load_time", currentTime.toString());
       }
     } catch (e) {
-      // Fallback for privacy mode or if localStorage is disabled
-      // Load the ad normally so we don't lose revenue, but prevent crashes
-      setShouldLoadAd(true);
+      console.error("Monetag Ad Error:", e);
     }
-  }, []);
+  }, [zoneId]);
 
-  if (!shouldLoadAd) {
-    return null;
-  }
-
-  return (
-    <Script
-      src="https://quge5.com/88/tag.min.js"
-      data-zone={zoneId}
-      strategy="lazyOnload"
-      data-cfasync="false"
-    />
-  );
+  return null;
 }
