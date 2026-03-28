@@ -4,17 +4,17 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "PBShub - Palli Bidyut Meter Manual & REB Technical DataHub",
+  title: "PBS Hub | Your Central Data & Notes Repository",
   description: "Advanced DataHub for PBS Palli Bidyut Metering, Equipment Manuals, and REB Technical Documents. Find reading manual data formats, technical specifications, and guides.",
   keywords: "pbs meter, palli bidyut, reb, reading manual data format, electricity meter, technical manual, smart meter, pbs datahub, bangladesh rural electrification board, pollibidut reading guide",
   openGraph: {
-    title: "PBShub - PBS & REB Technical DataHub",
+    title: "PBS Hub | Your Central Data & Notes Repository",
     description: "Search for any Palli Bidyut (PBS) meter manual or REB technical specification with detailed data formats.",
     type: "website",
     locale: "bn_BD",
   },
   icons: {
-    icon: 'https://i.ibb.co/C3C1Xdtn/96.png',
+    icon: '/favicon.png',
   },
   verification: {
     google: "IdAoPkn7BxrOZRM_D7yIs43U0Xam172NcFRgIrCd108",
@@ -26,9 +26,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PBS Hub",
+    "url": "https://pbshub.vercel.app/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://pbshub.vercel.app/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <html lang="en">
       <body className="animate-fade" suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Navbar />
         <main style={{ paddingTop: '80px', minHeight: '100vh' }}>
           {children}

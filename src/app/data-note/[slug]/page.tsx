@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   try {
     await connectDB();
-    const note = await DataNote.findOne({ slug, status: 'approved' }).select('title details category type').lean();
+    const note = await DataNote.findOne({ slug, status: 'approved' }).select('title details category type icon').lean();
     
     if (!note) {
       return {
@@ -31,11 +31,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       keywords,
+      icons: note.icon ? {
+        icon: note.icon,
+        shortcut: note.icon,
+        apple: note.icon,
+      } : undefined,
       openGraph: {
         title,
         description,
         type: 'article',
         publishedTime: (note as any).createdAt?.toISOString(),
+        images: note.icon ? [note.icon] : [],
       },
     };
   } catch (error) {

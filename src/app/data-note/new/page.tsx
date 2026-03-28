@@ -72,9 +72,12 @@ export default function NewNotePage() {
       const data = await res.json();
       if (res.ok) {
         router.push(`/data-note/${data.note.slug}`);
+      } else {
+        alert(data.error || 'Failed to create hub');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to create hub', err);
+      alert('Network or server error submitting hub');
     }
     setLoading(false);
   };

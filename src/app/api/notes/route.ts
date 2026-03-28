@@ -173,7 +173,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ note }, { status: 201 });
   } catch (error) {
-    console.error('POST /api/notes error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 });
   }
 }
