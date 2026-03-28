@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "PBS Hub | Your Central Data & Notes Repository",
@@ -41,6 +42,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="animate-fade" suppressHydrationWarning>
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="224134"
+          strategy="lazyOnload"
+          data-cfasync="false"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
