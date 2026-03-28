@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import MonetagAd from "@/components/MonetagAd";
 
 export const metadata: Metadata = {
   title: "PBS Hub | Your Central Data & Notes Repository",
@@ -40,10 +41,8 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <head>
-        <script src="https://quge5.com/88/tag.min.js" data-zone="224134" async data-cfasync="false"></script>
-      </head>
       <body className="animate-fade" suppressHydrationWarning>
+        <MonetagAd zoneId="10797546" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
