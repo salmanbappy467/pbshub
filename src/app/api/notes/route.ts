@@ -178,6 +178,17 @@ export async function POST(request: NextRequest) {
       photos: [],
     });
 
+    // Auto-ping Google to crawl the updated sitemap instantly
+    try {
+      const sitemapUrl = encodeURIComponent('https://pbshub.vercel.app/sitemap.xml');
+      await Promise.allSettled([
+        fetch(`https://www.google.com/ping?sitemap=${sitemapUrl}`),
+        fetch(`https://www.bing.com/ping?sitemap=${sitemapUrl}`)
+      ]);
+    } catch (e) {
+      // Ignore background ping errors
+    }
+
     return NextResponse.json({ note }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 });
