@@ -131,6 +131,13 @@ export async function POST(request: NextRequest) {
 
     await connectDB();
 
+    // Remove old unused unique index if it exists, to prevent creation errors
+    try {
+      await DataNote.collection.dropIndex('noteId_1');
+    } catch (e) {
+      // index might not exist, ignore
+    }
+
     const body = await request.json();
     const { title, category, icon, item, type, details } = body;
 
