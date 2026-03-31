@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next';
 import { connectDB } from '@/lib/db';
 import { DataNote } from '@/models/DataNote';
 
+export const revalidate = 3600; // প্রতি ১ ঘণ্টায় sitemap রিজেনারেট হবে
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pbshub.vercel.app';
 
