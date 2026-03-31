@@ -29,6 +29,7 @@ export async function POST(
       full_name: user.full_name,
       profile_pic_url: user.profile_pic_url,
       text: text.trim(),
+      likes: [],
       createdAt: new Date(),
     });
     await note.save();

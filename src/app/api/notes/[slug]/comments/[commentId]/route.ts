@@ -22,11 +22,11 @@ export async function DELETE(
     const note = await DataNote.findOne(query);
     if (!note) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-    const comment = note.comments.id(commentId);
+    const comment = note.comments.find((c: any) => String(c._id) === commentId);
     if (!comment) return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
 
-    // Use pull to remove the sub-document
-    note.comments.pull(commentId);
+    // Remove the comment by filtering it out
+    note.comments = note.comments.filter((c: any) => String(c._id) !== commentId);
     await note.save();
 
     return NextResponse.json({ success: true });

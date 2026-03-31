@@ -208,7 +208,6 @@ DataNoteSchema.index({
 
 // Regular indexes
 DataNoteSchema.index({ category: 1, status: 1 });
-DataNoteSchema.index({ slug: 1 });
 
 // Clear all related model caches to ensure schema changes take effect
 ['DataNote'].forEach(name => {

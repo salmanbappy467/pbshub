@@ -20,7 +20,7 @@ export async function POST(
     const note = await DataNote.findOne(query);
     if (!note) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-    const comment = note.comments.id(commentId);
+    const comment = note.comments.find((c: any) => String(c._id) === commentId);
     if (!comment) return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
 
     if (!comment.likes) comment.likes = [];
