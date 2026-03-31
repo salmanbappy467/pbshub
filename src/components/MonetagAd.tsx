@@ -15,7 +15,7 @@ export default function MonetagAd({ zoneId = "224134" }: { zoneId?: string }) {
         
         // ডাইনামিকালি স্ক্রিপ্ট অ্যাড করা হচ্ছে, যা Next.js-এর অপটিমাইজেশনকে বাইপাস করে সরাসরি কাজ করবে
         const script = document.createElement("script");
-        script.src = "https://qug.e-5.com/88/tag.min.js";
+        script.src = "https://quge5.com/88/tag.min.js";
         script.setAttribute("data-zone", zoneId);
         script.async = true;
         script.setAttribute("data-cfasync", "false");

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import ContributorList from '../ContributorList';
 import PhotoGallery from '../PhotoGallery';
 import CommentSection from '../CommentSection';
+import EditHubModal from '../EditHubModal';
 
 export default function GenericDataNoteLayout({ note, user, onUpdate }: { note: any; user: any; onUpdate: () => void }) {
   const [likes, setLikes] = useState(note.likes?.length || 0);
   const [isLiked, setIsLiked] = useState(user ? note.likes?.includes(user.username) : false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const [isAddingFile, setIsAddingFile] = useState(false);
   const [fileTitle, setFileTitle] = useState('');
@@ -166,6 +168,11 @@ export default function GenericDataNoteLayout({ note, user, onUpdate }: { note: 
          </div>
 
          <div className="header-actions-side">
+            {(user?.role === 'admin' || user?.role === 'owner' || user?.username === note.createdBy?.username) && (
+              <button onClick={() => setShowEditModal(true)} className="btn-side-mini" title="Edit Hub">
+                ✏️
+              </button>
+            )}
             <div className="action-box-mini">
               <button onClick={handleLike} className={`btn-side-mini ${isLiked ? 'liked' : ''}`} title="Like Hub">
                  {isLiked ? '❤️' : '🤍'}
@@ -392,6 +399,11 @@ export default function GenericDataNoteLayout({ note, user, onUpdate }: { note: 
       ].filter(c => c && c.username)} />
 
       <CommentSection noteId={note._id} comments={note.comments} user={user} onUpdate={onUpdate} />
+
+      {/* Edit Hub Modal */}
+      {showEditModal && (
+        <EditHubModal note={note} onClose={() => setShowEditModal(false)} onSaved={onUpdate} />
+      )}
 
       {/* Modal moved to ROOT level for perfect accessibility */}
       {isAddingFile && (

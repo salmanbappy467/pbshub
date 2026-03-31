@@ -4,10 +4,12 @@ import SpecTable from '../SpecTable';
 import ContributorList from '../ContributorList';
 import PhotoGallery from '../PhotoGallery';
 import CommentSection from '../CommentSection';
+import EditHubModal from '../EditHubModal';
 
 export default function MeterManualLayout({ note, user, onUpdate }: { note: any; user: any; onUpdate: () => void }) {
   const [likes, setLikes] = useState(note.likes?.length || 0);
   const [isLiked, setIsLiked] = useState(user ? note.likes?.includes(user.username) : false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const [isEditingManual, setIsEditingManual] = useState(false);
   const [manualRows, setManualRows] = useState<any[]>([]);
@@ -92,7 +94,7 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
 
          <div className="header-actions-side">
             {(user?.role === 'admin' || user?.role === 'owner' || user?.username === note.createdBy?.username) && (
-              <button onClick={() => alert('Editing Hub info...')} className="btn-side-mini" title="Edit Hub">
+              <button onClick={() => setShowEditModal(true)} className="btn-side-mini" title="Edit Hub">
                 ✏️
               </button>
             )}
@@ -307,6 +309,9 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
       {/* Comment Section */}
       <CommentSection noteId={note._id} comments={note.comments} user={user} onUpdate={onUpdate} />
 
+      {showEditModal && (
+        <EditHubModal note={note} onClose={() => setShowEditModal(false)} onSaved={onUpdate} />
+      )}
     </div>
   );
 }

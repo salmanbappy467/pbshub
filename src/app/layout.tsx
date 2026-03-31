@@ -42,6 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Monetag ad — temporarily disabled
         <Script
           id="monetag-ad-manager"
           strategy="lazyOnload"
@@ -67,6 +68,7 @@ export default function RootLayout({
             `
           }}
         />
+        */}
       </head>
       <body className="animate-fade" suppressHydrationWarning>
         <script
