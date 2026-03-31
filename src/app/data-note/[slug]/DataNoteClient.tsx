@@ -44,29 +44,17 @@ export default function DataNoteClient({ initialNote, slug }: { initialNote: any
   }, [slug]);
 
   if (loading) return (
-    <div className="loading-note">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '400px',
+      gap: '20px',
+      color: 'var(--text-muted)',
+    }}>
       <div className="spinner"></div>
       <p>Loading Technical Data...</p>
-      <style jsx>{`
-        .loading-note {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 400px;
-          gap: 20px;
-          color: var(--text-muted);
-        }
-        .spinner {
-          width: 50px;
-          height: 50px;
-          border: 4px solid var(--glass-border);
-          border-top-color: var(--primary-accent);
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 
@@ -95,14 +83,8 @@ export default function DataNoteClient({ initialNote, slug }: { initialNote: any
   };
 
   return (
-    <div className="note-page-wrapper animate-fade">
+    <div className="note-page-wrapper animate-fade" style={{ padding: '20px 0 40px 0' }}>
       {renderLayout()}
-
-      <style jsx>{`
-        .note-page-wrapper {
-          padding: 20px 0 40px 0;
-        }
-      `}</style>
     </div>
   );
 }

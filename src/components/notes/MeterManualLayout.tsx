@@ -102,6 +102,20 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
               </button>
               <span className="like-count-mini">{likes}</span>
             </div>
+            <button
+              className="btn-side-mini"
+              title="Share"
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({ title: note.title, url: window.location.href });
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied!');
+                }
+              }}
+            >
+              🔗
+            </button>
          </div>
       </header>
 
@@ -130,6 +144,7 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
                      <th>SL</th>
                      <th>Display ID</th>
                      <th>Unit</th>
+                     <th>Display Format</th>
                      <th>Name</th>
                      <th>Details</th>
                      <th></th>
@@ -141,6 +156,7 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
                        <td><input className="edit-input-tiny" style={{fontSize: '1rem'}} value={row.sl_no} onChange={(e) => updateRow(idx, 'sl_no', e.target.value)} /></td>
                        <td><input className="edit-input-tiny" style={{fontSize: '1rem'}} value={row.id_number} onChange={(e) => updateRow(idx, 'id_number', e.target.value)} /></td>
                        <td><input className="edit-input-tiny" style={{fontSize: '1rem'}} value={row.display_unit} onChange={(e) => updateRow(idx, 'display_unit', e.target.value)} /></td>
+                       <td><input className="edit-input-small" style={{fontSize: '1rem'}} value={row.display_format || ''} onChange={(e) => updateRow(idx, 'display_format', e.target.value)} /></td>
                        <td><input className="edit-input-small" style={{fontSize: '1rem'}} value={row.parameter_name} onChange={(e) => updateRow(idx, 'parameter_name', e.target.value)} /></td>
                        <td><input className="edit-input-small" style={{fontSize: '1rem'}} value={row.parameter_details} onChange={(e) => updateRow(idx, 'parameter_details', e.target.value)} /></td>
                        <td><button onClick={() => setManualRows(manualRows.filter((_, i) => i !== idx))} className="btn-remove">×</button></td>
@@ -150,7 +166,7 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
                </table>
              </div>
              <div className="edit-actions" style={{marginTop: '20px'}}>
-               <button onClick={() => setManualRows([...manualRows, {sl_no: manualRows.length + 1, id_number:'', display_unit:'', parameter_name:'', parameter_details:''}])} className="btn-add-row">
+               <button onClick={() => setManualRows([...manualRows, {sl_no: manualRows.length + 1, id_number:'', display_unit:'', display_format:'', parameter_name:'', parameter_details:''}])} className="btn-add-row">
                  + Add Row
                </button>
                <div className="right-btns">
@@ -163,12 +179,14 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
            </div>
          ) : (
            <div className="display-table-container">
-             <table className="display-table">
+             {/* ── Desktop Table ── */}
+             <table className="display-table manual-desktop-table">
                 <thead>
                   <tr>
                     <th>SL</th>
                     <th>Display ID</th>
                     <th>Unit</th>
+                    <th>Display Format</th>
                     <th>Parameter Name</th>
                     <th>Details & Remarks</th>
                   </tr>
@@ -177,46 +195,73 @@ export default function MeterManualLayout({ note, user, onUpdate }: { note: any;
                   {(() => {
                     const isAdminOrOwner = user?.role === 'admin' || user?.role === 'owner';
                     const allManualSections = note.manualSections?.filter((s:any) => s.section_type === 'display-list') || [];
-                    
-                    // Prioritization: If there are ANY pending sections visible to this user, show ONLY those.
-                    // Otherwise show approved ones. This prevents duplication of rows in the same hub.
                     const visiblePending = allManualSections.filter((s:any) => 
                       s.status === 'pending' && (isAdminOrOwner || s.contributors?.some((c:any) => c.username === user?.username))
                     );
-
                     const displaySections = visiblePending.length > 0 
                       ? visiblePending 
                       : allManualSections
                         .filter((s:any) => s.status === 'approved')
                         .sort((a:any, b:any) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime())
                         .slice(0, 1);
-
                     const allRows = displaySections.flatMap((s:any) => s.display_rows?.map((row:any) => ({ ...row, status: s.status, sectionId: s._id })));
-
-                    if (allRows.length === 0) {
-                      return <tr><td colSpan={5} className="empty-row text-center">No manual data added yet.</td></tr>;
-                    }
-
+                    if (allRows.length === 0) return <tr><td colSpan={6} className="empty-row text-center">No manual data added yet.</td></tr>;
                     const displayedRows = showAllManual ? allRows : allRows.slice(0, 5);
-
                     return displayedRows.map((row:any, idx:number) => (
                       <tr key={`${row.sectionId}-${idx}`} className={row.status === 'pending' ? 'pending-row' : ''}>
-                        <td className="text-center" style={{fontSize: '1rem'}}>{row.sl_no}</td>
-                        <td className="text-center" style={{fontSize: '1rem'}}><b>{row.id_number}</b></td>
-                        <td className="text-center" style={{fontSize: '1rem'}}>{row.display_unit}</td>
-                        <td className="param-name" style={{fontSize: '1rem'}}>
+                        <td className="text-center">{row.sl_no}</td>
+                        <td className="text-center"><b>{row.id_number}</b></td>
+                        <td className="text-center">{row.display_unit}</td>
+                        <td className="text-center">{row.display_format}</td>
+                        <td className="param-name">
                           {row.parameter_name}
                           {row.status === 'pending' && <span className="pending-badge-mini">Pending Review</span>}
                         </td>
-                        <td className="param-details" style={{fontSize: '1rem'}}>
-                           <p>{row.parameter_details}</p>
-                           {row.remarks && <p className="remarks">💡 {row.remarks}</p>}
+                        <td className="param-details">
+                          <p>{row.parameter_details}</p>
+                          {row.remarks && <p className="remarks">💡 {row.remarks}</p>}
                         </td>
                       </tr>
                     ));
                   })()}
                 </tbody>
              </table>
+
+             {/* ── Mobile Cards ── */}
+             <div className="manual-mobile-cards">
+               {(() => {
+                 const isAdminOrOwner = user?.role === 'admin' || user?.role === 'owner';
+                 const allManualSections = note.manualSections?.filter((s:any) => s.section_type === 'display-list') || [];
+                 const visiblePending = allManualSections.filter((s:any) => 
+                   s.status === 'pending' && (isAdminOrOwner || s.contributors?.some((c:any) => c.username === user?.username))
+                 );
+                 const displaySections = visiblePending.length > 0 
+                   ? visiblePending 
+                   : allManualSections
+                     .filter((s:any) => s.status === 'approved')
+                     .sort((a:any, b:any) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime())
+                     .slice(0, 1);
+                 const allRows = displaySections.flatMap((s:any) => s.display_rows?.map((row:any) => ({ ...row, status: s.status, sectionId: s._id })));
+                 if (allRows.length === 0) return <p className="empty-row text-center">No manual data added yet.</p>;
+                 const displayedRows = showAllManual ? allRows : allRows.slice(0, 5);
+                 return displayedRows.map((row:any, idx:number) => (
+                   <div key={`m-${row.sectionId}-${idx}`} className={`manual-card${row.status === 'pending' ? ' pending-card' : ''}`}>
+                     <div className="manual-card-top">
+                       <span className="manual-sl">{row.sl_no}</span>
+                       <b className="manual-id">{row.id_number}</b>
+                       <span className="manual-unit">{row.display_unit}</span>
+                     </div>
+                     {row.display_format && <div className="manual-card-format">{row.display_format}</div>}
+                     <div className="manual-card-name">
+                       {row.parameter_name}
+                       {row.status === 'pending' && <span className="pending-badge-mini">Pending</span>}
+                     </div>
+                     {row.parameter_details && <div className="manual-card-details">{row.parameter_details}</div>}
+                     {row.remarks && <div className="remarks">💡 {row.remarks}</div>}
+                   </div>
+                 ));
+               })()}
+             </div>
            </div>
          )}
          {(() => {

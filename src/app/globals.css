@@ -1103,7 +1103,7 @@ option { background: #111; color: white; }
 
 /* ---- Meter Manual: Display Table ---- */
 .display-table-container { overflow-x: auto; margin-top: 10px; border-radius: 16px; }
-.display-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+.display-table { width: 100%; border-collapse: collapse; min-width: 800px; }
 .display-table th { 
   text-align: center; padding: 14px 16px; color: var(--text-muted); 
   font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
@@ -1310,7 +1310,98 @@ option { background: #111; color: white; }
   .edit-row-top { flex-direction: column; }
   .edit-actions { flex-direction: column; gap: 14px; }
   .right-btns { width: 100%; justify-content: space-between; }
-  .display-table { min-width: 900px; }
+  .display-table { min-width: 1000px; }
+}
+
+/* desktop: mobile cards লুকানো */
+.manual-mobile-only { display: none; }
+.manual-desktop-only { display: table-cell; }
+.manual-mobile-cards { display: none; }
+
+/* ---- Manual Section: Mobile Card Layout ---- */
+@media (max-width: 640px) {
+  .manual-desktop-table { display: none !important; }
+  .manual-mobile-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+
+  .manual-card {
+    background: rgba(26, 30, 38, 0.8);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+  .manual-card:hover { border-color: rgba(59,130,246,0.35); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+  /* Row 1: SL বামে · ID মাঝে · Unit ডানে */
+  .manual-card-top {
+    display: flex;
+    align-items: center;
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .manual-sl {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    display: inline-block;
+    transform: rotate(-30deg);
+    min-width: 20px;
+    flex-shrink: 0;
+  }
+  .manual-id {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .manual-unit {
+    margin-left: auto;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  /* Row 2: Display Format */
+  .manual-card-format {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+    background: rgba(59,130,246,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+    letter-spacing: 0.01em;
+  }
+
+  /* Row 3: Parameter Name */
+  .manual-card-name {
+    padding: 10px 14px 4px;
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+  }
+
+  /* Row 4: Details */
+  .manual-card-details {
+    padding: 4px 14px 14px;
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .pending-card { border-left: 3px solid var(--warning); }
 }
 
 /* ========================================

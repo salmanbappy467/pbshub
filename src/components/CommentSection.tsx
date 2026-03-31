@@ -86,7 +86,7 @@ export default function CommentSection({
                     <img src={comment.profile_pic_url || 'https://via.placeholder.com/40'} alt="avatar" className="comment-avatar-small" />
                     <span className="comment-author-name">{comment.full_name}</span>
                     <span className="comment-timestamp-dot">•</span>
-                    <span className="comment-timestamp">{new Date(comment.createdAt).toLocaleDateString()}</span>
+                    <span className="comment-timestamp">{new Date(comment.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
                   </div>
                   <div className="comment-actions">
                     {(user?.role === 'admin' || user?.role === 'owner') && (

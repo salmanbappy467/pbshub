@@ -172,6 +172,20 @@ export default function GenericDataNoteLayout({ note, user, onUpdate }: { note: 
               </button>
               <span className="like-count-mini">{likes}</span>
             </div>
+            <button
+              className="btn-side-mini"
+              title="Share"
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({ title: note.title, url: window.location.href });
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied!');
+                }
+              }}
+            >
+              🔗
+            </button>
          </div>
       </header>
 

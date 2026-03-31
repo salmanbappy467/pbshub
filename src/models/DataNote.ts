@@ -29,6 +29,7 @@ export interface IDisplayRow {
   sl_no: number;
   id_number: string;
   display_unit: string;
+  display_format: string;
   parameter_name: string;
   parameter_details: string;
   remarks: string;
@@ -114,6 +115,7 @@ const DisplayRowSchema = new Schema<IDisplayRow>({
   sl_no: Number,
   id_number: String,
   display_unit: String,
+  display_format: String,
   parameter_name: String,
   parameter_details: String,
   remarks: String,
@@ -208,9 +210,9 @@ DataNoteSchema.index({
 DataNoteSchema.index({ category: 1, status: 1 });
 DataNoteSchema.index({ slug: 1 });
 
-if (mongoose.models && mongoose.models.DataNote) {
-  delete mongoose.models.DataNote;
-}
+// Clear all related model caches to ensure schema changes take effect
+['DataNote'].forEach(name => {
+  if (mongoose.models[name]) delete mongoose.models[name];
+});
 
-export const DataNote =
-  mongoose.models.DataNote || mongoose.model<IDataNote>('DataNote', DataNoteSchema);
+export const DataNote = mongoose.model<IDataNote>('DataNote', DataNoteSchema);
