@@ -111,7 +111,7 @@ export default function Navbar() {
             <button onClick={handleLogout} className="mobile-item btn-logout">🚪 Logout</button>
           </>
         ) : (
-          <Link href="/login" onClick={() => setIsMobileNavOpen(false)} className="mobile-item">Login</Link>
+          <Link href="https://pbsnet.pages.dev/" onClick={() => setIsMobileNavOpen(false)} className="mobile-item">Login</Link>
         )}
       </div>
 
